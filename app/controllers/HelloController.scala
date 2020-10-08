@@ -11,12 +11,19 @@ import play.api.mvc.Request
 @Singleton
 class HelloController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
 
-  def get(name: Option[String]) =
+  def get(a: Option[String], b: Option[String]) =
     Action { implicit request: Request[AnyContent] =>
       Ok {
-        name
-          .map(s => s"Hello, $s!")
-          .getOrElse("""Please give a name as a query parameter named "name".""")
+        val result = (a, b) match {
+          case (Some(x), Some(y)) => Some(x.toInt + y.toInt)
+          case (None, Some(_)) => None
+          case (Some(_), None) => None
+          case (None, None) => None
+        }
+        result
+          .map(r => s"a + b = $r")
+          .getOrElse("""Please give arguments of a and b.""")
+
       }
     }
 }
