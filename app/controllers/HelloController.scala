@@ -21,7 +21,23 @@ class HelloController @Inject()(cc: ControllerComponents) extends AbstractContro
           case (None, None) => None
         }
         result
-          .map(r => s"a + b = $r")
+          .map(r => s"a + ab = $r")
+          .getOrElse("""root""")
+
+      }
+    }
+
+  def plus(a: Option[String], b: Option[String]) =
+    Action { implicit request: Request[AnyContent] =>
+      Ok {
+        val result = (a, b) match {
+          case (Some(x), Some(y)) => Some(x.toInt + y.toInt)
+          case (None, Some(_)) => None
+          case (Some(_), None) => None
+          case (None, None) => None
+        }
+        result
+          .map(r => s"a + bb = $r")
           .getOrElse("""Please give arguments of a and b.""")
 
       }
